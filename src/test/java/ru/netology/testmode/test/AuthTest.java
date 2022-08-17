@@ -33,6 +33,11 @@ public class AuthTest {
     @DisplayName("Should successfully login with active registered user")
     void shouldSuccessfulLoginIfRegisteredActiveUser() {
         var registeredUser = getRegisteredUser("active");
+        $("[name='login']").setValue(registeredUser.getLogin());
+        $("[name='password']").setValue(registeredUser.getPassword());
+        $(".button__text").click();
+        $(".App_appContainer__3jRx1").shouldHave(Condition.exactText("Личный кабинет"),
+                Duration.ofSeconds(15));
 
         // TODO: добавить логику теста, в рамках которого будет выполнена попытка входа в личный кабинет с учётными
         //  данными зарегистрированного активного пользователя, для заполнения полей формы используйте
@@ -45,6 +50,11 @@ public class AuthTest {
         var notRegisteredUser = getUser("active");
         // TODO: добавить логику теста в рамках которого будет выполнена попытка входа в личный кабинет
         //  незарегистрированного пользователя, для заполнения полей формы используйте пользователя notRegisteredUser
+        $("[name='login']").setValue(notRegisteredUser.getLogin());
+        $("[name='password']").setValue(notRegisteredUser.getPassword());
+        $(".button__text").click();
+        $(".App_appContainer__3jRx1").shouldHave(Condition.exactText("Личный кабинет"),
+                Duration.ofSeconds(15));
     }
 
     @Test

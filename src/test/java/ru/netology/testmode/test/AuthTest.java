@@ -6,10 +6,7 @@ import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import ru.netology.testmode.data.DataGenerator;
 
 import java.time.Duration;
@@ -25,8 +22,13 @@ public class AuthTest {
 
     @BeforeEach
     void setup() {
-        Configuration.holdBrowserOpen = true;
+        //Configuration.holdBrowserOpen = true;
         open("http://localhost:9999");
+    }
+
+    @AfterEach
+    void setDown() {
+        closeWindow();
     }
 
     @Test
@@ -53,7 +55,7 @@ public class AuthTest {
         $("[name='login']").setValue(notRegisteredUser.getLogin());
         $("[name='password']").setValue(notRegisteredUser.getPassword());
         $(".button__text").click();
-        $(".App_appContainer__3jRx1").shouldHave(Condition.exactText("Личный кабинет"),
+        $("[class='notification__content']").shouldHave(Condition.exactText(("Ошибка! Неверно указан логин или пароль")),
                 Duration.ofSeconds(15));
     }
 
@@ -63,6 +65,11 @@ public class AuthTest {
         var blockedUser = getRegisteredUser("blocked");
         // TODO: добавить логику теста в рамках которого будет выполнена попытка входа в личный кабинет,
         //  заблокированного пользователя, для заполнения полей формы используйте пользователя blockedUser
+        $("[name='login']").setValue(blockedUser.getLogin());
+        $("[name='password']").setValue(blockedUser.getPassword());
+        $(".button__text").click();
+        $("[class='notification__content']").shouldHave(Condition.exactText(("Ошибка! Пользователь заблокирован")),
+                Duration.ofSeconds(15));
     }
 
     @Test
@@ -73,6 +80,11 @@ public class AuthTest {
         // TODO: добавить логику теста в рамках которого будет выполнена попытка входа в личный кабинет с неверным
         //  логином, для заполнения поля формы "Логин" используйте переменную wrongLogin,
         //  "Пароль" - пользователя registeredUser
+        $("[name='login']").setValue(wrongLogin);
+        $("[name='password']").setValue(registeredUser.getPassword());
+        $(".button__text").click();
+        $("[class='notification__content']").shouldHave(Condition.exactText(("Ошибка! Неверно указан логин или пароль")),
+                Duration.ofSeconds(15));
     }
 
     @Test
@@ -83,5 +95,11 @@ public class AuthTest {
         // TODO: добавить логику теста в рамках которого будет выполнена попытка входа в личный кабинет с неверным
         //  паролем, для заполнения поля формы "Логин" используйте пользователя registeredUser,
         //  "Пароль" - переменную wrongPassword
+        $("[name='login']").setValue(registeredUser.getLogin());
+        $("[name='password']").setValue(wrongPassword);
+        $(".button__text").click();
+        $("[class='notification__content']").shouldHave(Condition.exactText(("Ошибка! Неверно указан логин или пароль")),
+                Duration.ofSeconds(15));
     }
+
 }

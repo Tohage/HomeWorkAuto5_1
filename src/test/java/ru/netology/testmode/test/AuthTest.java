@@ -23,26 +23,6 @@ import static ru.netology.testmode.data.DataGenerator.getRandomPassword;
 
 public class AuthTest {
 
-//    private static RequestSpecification requestSpec = new RequestSpecBuilder()
-//            .setBaseUri("http://localhost")
-//            .setPort(9999)
-//            .setAccept(ContentType.JSON)
-//            .setContentType(ContentType.JSON)
-//            .log(LogDetail.ALL)
-//            .build();
-
-//    @BeforeAll
-//    static void setUpAll() {
-//        // сам запрос
-//        given() // "дано"
-//                .spec(requestSpec) // указываем, какую спецификацию используем
-//                .body(new DataGenerator.RegistrationDto("vasya", "password", "active")) // передаём в теле объект, который будет преобразован в JSON
-//                .when() // "когда"
-//                .post("/api/system/users") // на какой путь, относительно BaseUri отправляем запрос
-//                .then() // "тогда ожидаем"
-//                .statusCode(200); // код 200 OK
-//    }
-
     @BeforeEach
     void setup() {
         Configuration.holdBrowserOpen = true;
@@ -57,11 +37,6 @@ public class AuthTest {
         // TODO: добавить логику теста, в рамках которого будет выполнена попытка входа в личный кабинет с учётными
         //  данными зарегистрированного активного пользователя, для заполнения полей формы используйте
         //  пользователя registeredUser
-        $("[data-test-id='login'] input").setValue(registeredUser.getLogin());
-        $("[data-test-id='password'] input").setValue(registeredUser.getPassword());
-        $x("//span[@class='button__text']").click();
-        $x("//*[contains(text(),'Личный кабинет')]").shouldHave(Condition.exactText("Личный кабинет"),
-                Duration.ofSeconds(15));
     }
 
     @Test
